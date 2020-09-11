@@ -1,3 +1,6 @@
+import numpy
+
+
 def hello_world():
     """ Returns 'Hello, World!'
 
@@ -8,7 +11,10 @@ def hello_world():
     >>> hello_world()
     'Hello, World!'
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    return "Hello, World!"
+
+
+import numpy as np
 
 
 def sum_unique(l):
@@ -27,7 +33,11 @@ def sum_unique(l):
     >>> sum_unique([2, 2, 2, 2, 1])
     3
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    x = []
+    for i in l:
+        if i not in x:
+            x.append(i)
+    return sum(x)
 
 
 def palindrome(x):
@@ -47,7 +57,19 @@ def palindrome(x):
     >>> palindrome('python')
     False
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    if type(x) is int:
+        y = str(x)
+        rev = y[::-1]
+        if y == rev:
+            return True
+        else:
+            return False
+
+    rev = x[::-1]
+    if x == rev:
+        return True
+
+    return False
 
 
 def sum_multiples(num):
@@ -66,7 +88,11 @@ def sum_multiples(num):
     >>> sum_multiples(16) # Multiples: [3, 5, 6, 9, 10, 12, 15]
     60
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    x = 0
+    for a in range(0, num):
+        if a % 3 == 0 or a % 5 == 0:
+            x += a
+    return x
 
 
 def num_func_mapper(nums, funs):
@@ -84,7 +110,11 @@ def num_func_mapper(nums, funs):
     >>> num_func_mapper(num_list, f_list)
     [11, 15]
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    ret = []
+    for a in range(0, len(funs)):
+        ret.append(funs[a](nums))
+
+    return ret
 
 
 def validate_grid_indices(grid_indices, grid_size):
@@ -114,7 +144,17 @@ def validate_grid_indices(grid_indices, grid_size):
             (73, 143),
             (143, 213),), 70)
     """
-    raise NotImplementedError('Please implement this function for full credit')
+
+    if not (len(grid_indices) == 1 or len(grid_indices) == 2 or len(grid_indices) == 3):
+        raise ValueError('Length of grid_indices is wrong.')
+
+    for x in grid_indices:
+        if not (len(x) == 2):
+            raise ValueError('Sub-sequences must be length 2.')
+
+    for y in grid_indices:
+        if not (abs(x[0] - x[1]) == grid_size):
+            raise ValueError('Grid indexes do not match grid_size.')
 
 
 def pythagorean_triples(n):
@@ -137,4 +177,12 @@ def pythagorean_triples(n):
     >>> pythagorean_triples(20)
     [(3, 4, 5), (6, 8, 10), (5, 12, 13), (9, 12, 15), (8, 15, 17)]
     """
-    raise NotImplementedError('Please implement this function for full credit')
+    pyth = []
+
+    for a in range(1, n):
+        for b in range(a, n):
+            for c in range(b, n):
+                if a * a + b * b == c * c:
+                    pyth.append((a, b, c))
+    pyth.sort(key=lambda p: p[2])
+    return pyth
