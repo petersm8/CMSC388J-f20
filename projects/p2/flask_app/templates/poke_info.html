@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('index') }}"><b> HomePage </b></a>
+
+    <h2>{{ pokemon.name }}</h2>
+    <h4>height = {{ pokemon.height }}</h4>
+    <h4>weight = {{ pokemon.weight }}</h4>
+    <h4>base exp = {{ pokemon.base_exp }}</h4>
+    <h4>moves: {{ pokemon.moves }}</h4>
+{% for ability in pokemon.abilities %}
+    <a href="{{ url_for('pokemon_with_ability', ability_name=ability) }}"><h4>{{ ability }}</h4></a>
+{% endfor %}
+{% endblock %}
