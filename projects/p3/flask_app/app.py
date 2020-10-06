@@ -37,26 +37,36 @@ def index():
 
 @app.route('/search-results/<query>', methods=['GET'])
 def query_results(query):
-    return render_template('query_results.html', results=client.search(query))
+    try:
+        q = client.search(query)
+    except ValueError as ve:
+        return render_template('query_results.html', error_msg=ve)
+
+    if q is not None:
+        return render_template('query_results.html', results=client.search(query))
 
 
 @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
-    mov = client.retrieve_movie_by_id(movie_id)
+    try:
+        mov = client.retrieve_movie_by_id(movie_id)
+    except ValueError as ve:
+        return render_template('movie_detail.html', error_msg=ve)
 
-    form = MovieReviewForm()
-    if form.validate_on_submit():
-        rev = {
-            'commenter': form.name.data,
-            'content': form.text.data,
-            'date': current_time(),
-            'imdb_id': movie_id,
-        }
-        mongo.db.reviews.insert_one(rev)
-        return redirect(request.path)
+    if mov is not None:
+        form = MovieReviewForm()
+        if form.validate_on_submit():
+            rev = {
+                'commenter': form.name.data,
+                'content': form.text.data,
+                'date': current_time(),
+                'imdb_id': movie_id,
+            }
+            mongo.db.reviews.insert_one(rev)
+            return redirect(request.path)
 
-    review = list(mongo.db.reviews.find({'imdb_id': mov.imdb_id}))
-    return render_template('movie_detail.html', movie=mov, reviews=review, form=form)
+        review = list(mongo.db.reviews.find({'imdb_id': mov.imdb_id}))
+        return render_template('movie_detail.html', movie=mov, reviews=review, form=form)
 
 
 # Not a view function, used for creating a string for the current time.
