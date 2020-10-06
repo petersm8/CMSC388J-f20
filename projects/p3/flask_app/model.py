@@ -23,7 +23,7 @@ class Movie(object):
 class MovieClient(object):
     def __init__(self, api_key):
         self.sess = requests.Session()
-        self.base_url = f'http://www.omdbapi.com/?apikey={api_key}&r=json&type=movie&'
+        self.base_url = f'http://www.omdbapi.com/?apikey=9f77dffa&r=json&type=movie&'
 
 
     def search(self, search_string):
