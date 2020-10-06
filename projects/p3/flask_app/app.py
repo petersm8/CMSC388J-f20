@@ -11,7 +11,7 @@ from flask_app.forms import SearchForm, MovieReviewForm
 from flask_app.model import MovieClient
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27018/my_database"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/my_database"
 app.config['SECRET_KEY'] = b'p\xb0\x95\xddy\xcf\xc4\xcf+%\x87|k+\xe8\xc8'
 
 app.config.update(
@@ -42,17 +42,21 @@ def query_results(query):
 
 @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
+    mov = client.retrieve_movie_by_id(movie_id)
+
     form = MovieReviewForm()
     if form.validate_on_submit():
         rev = {
-            'name': form.name.data,
-            'text': form.text.data,
+            'commenter': form.name.data,
+            'content': form.text.data,
+            'date': current_time(),
+            'imdb_id': movie_id,
         }
         mongo.db.reviews.insert_one(rev)
         return redirect(request.path)
-    mov = client.retrieve_movie_by_id(movie_id)
-    reviews = mongo.db.reviews.find({'title': mov.title})
-    return render_template('movie_detail.html', movie=mov, reviews=reviews)
+
+    review = list(mongo.db.reviews.find({'imdb_id': mov.imdb_id}))
+    return render_template('movie_detail.html', movie=mov, reviews=review, form=form)
 
 
 # Not a view function, used for creating a string for the current time.
