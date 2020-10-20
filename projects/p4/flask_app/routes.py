@@ -80,11 +80,11 @@ def movie_detail(movie_id):
 
 @app.route("/user/<username>")
 def user_detail(username):
-    return "user_detail"
+    return render_template("user_detail.html", user=username)
 
 
 def custom_404():
-    pass
+    return render_template("404.html")
 
 
 """ ************ User Management views ************ """
@@ -92,21 +92,58 @@ def custom_404():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    return "register"
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data,email=form.email.data,password=hashed)
+        user.save()
+        return redirect(url_for('login'))
+
+    return render_template("register.html", title='Register', form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return "login"
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.objects(username=form.username.data).first()
+        if user is not None and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            return redirect(url_for('account'))
+    return render_template("login.html", title='Login', form=form)
 
 
 @app.route("/logout")
 @login_required
 def logout():
-    return "logout"
+    logout_user()
+    return redirect(login.html)
 
 
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    return "account"
+    if current_user.is_authenticated:
+        user_change = UpdateUsernameForm()
+        picture_change = UpdateProfilePicForm()
+        if user_change.validate_on_submit():
+            current_user.modify(username=user_change.username.data)
+            current_user.save()
+            return redirect(url_for('account'))
+        if picture_change.validate_on_submit():
+            img = picture_change.picture.data
+            filename = secure_filename(img.filename)
+            content_type = f'images/{filename[-3:]}'
+            if current_user.profile_pic.get() is None:
+                current_user.profile_pic.put(img.stream, content_type=content_type)
+            else:
+                current_user.profile_pic.replace(img.stream, content_type=content_type)
+            current_user.save()
+
+            return redirect(url_for('account'))
+        return render_template("account.html", nameform = user_change, picform = picture_change, image=current_user.profile_pic)
+

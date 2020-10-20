@@ -54,12 +54,32 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    pass
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=1, max=40)]
+    )
+    password = PasswordField("Password", validators=[InputRequired()])
+    submit = SubmitField("Log in")
+
+    def validate_username(self, username):
+        user = User.objects(username=username.data).first()
+        if user is None:
+            raise ValidationError("Username is not real")
 
 
 class UpdateUsernameForm(FlaskForm):
-    pass
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=1, max=40)]
+    )
+    submit = SubmitField("Submit")
+
+    def validate_username(self, username):
+        user = User.objects(username=username.data).first()
+        if user is not None:
+            raise ValidationError("Username is taken")
 
 
 class UpdateProfilePicForm(FlaskForm):
-    pass
+    picture = FileField(
+        "Profile Picture", validators=[FileAllowed(['jpg', 'png'], 'Images Only!')]
+    )
+    submit = SubmitField("Submit")

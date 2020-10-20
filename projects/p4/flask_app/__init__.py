@@ -20,7 +20,7 @@ from .client import MovieClient
 
 app = Flask(__name__)
 app.config["MONGODB_HOST"] = "mongodb://localhost:27017/project_4"
-app.config["SECRET_KEY"] = ""
+app.config["SECRET_KEY"] = b'p\xb0\x95\xddy\xcf\xc4\xcf+%\x87|k+\xe8\xc8'
 
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
