@@ -1,8 +1,14 @@
+{% extends "header.html" %}
 {% block content %}
-
-<div class="row">
-    <div class="col">
-        <h4> Why are you running!</h4>
+    {% if error_msg %}
+        <b>{{ error_msg }}</b>
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            <h4>You got an error! 404!</h4>
+            <a href="{{ url_for('index') }}">
+                Index
+            </a>
+        </div>
     </div>
-</div>
 {% endblock %}

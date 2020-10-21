@@ -73,7 +73,7 @@ permanently on your system (until you remove them, of course).
    ![alt text](images/env_var_windows_search.png "Searching for Environment Variable Settings")  
 2. Click on the "Environment Variables..." button  
    ![alt text](images/env_var_sys_props.PNG "System Properties Window")  
-3. Click on the "New..." button under "User Variables for <username>"  
+3. Click on the "New..." button under "User Variables for <self>"  
    ![alt text](images/env_var_window.PNG "Environment Variables Window")  
 4. Enter the desired environment variable name (`OMDB_API_KEY`) under "Variable name"
    and your key under "Variable value"  

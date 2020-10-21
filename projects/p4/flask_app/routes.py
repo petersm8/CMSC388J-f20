@@ -1,4 +1,5 @@
 # 3rd-party packages
+import flask
 from flask import render_template, request, redirect, url_for, flash
 from flask_mongoengine import MongoEngine
 from flask_login import (
@@ -80,11 +81,13 @@ def movie_detail(movie_id):
 
 @app.route("/user/<username>")
 def user_detail(username):
-    return render_template("user_detail.html", user=username)
+    image = load_user(username).get_b64_img()
+    reviews = Review.objects(commenter=load_user(username))
+    return render_template("user_detail.html", user=username, reviews=reviews, image=image)
 
-
-def custom_404():
-    return render_template("404.html")
+@app.errorhandler(404)
+def custom_404(e):
+    return render_template("404.html"), 404
 
 
 """ ************ User Management views ************ """
@@ -114,6 +117,8 @@ def login():
         if user is not None and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('account'))
+        else:
+            flash("Wrong Login!")
     return render_template("login.html", title='Login', form=form)
 
 
@@ -121,7 +126,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(login.html)
+    return redirect(url_for('index'))
 
 
 @app.route("/account", methods=["GET", "POST"])
@@ -145,5 +150,5 @@ def account():
             current_user.save()
 
             return redirect(url_for('account'))
-        return render_template("account.html", nameform = user_change, picform = picture_change, image=current_user.profile_pic)
+        return render_template("account.html", nameform = user_change, picform = picture_change, image=current_user.get_b64_img())
 

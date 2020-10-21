@@ -69,16 +69,16 @@ Now we'll go into detail about each of the new view functions:
 1. `account()` - Login required
    Should be routed at `/account`. Renders the `account.html` template.
    The template has spaces for a greeting to the user, a
-   username update form, a profile picture update form, and a link
+   self update form, a profile picture update form, and a link
    to see all of the current user's reviews.
 
-   In the `account()` view function, make sure you create the username
-   update form, properly modify the current user's username permanently
+   In the `account()` view function, make sure you create the self
+   update form, properly modify the current user's self permanently
    if they change it to a name that's not taken
    (commit change to database). 
 
    For the greeting, you can choose how to greet the current user. It should
-   use the current user's username to greet them. (**Hint:** the current user
+   use the current user's self to greet them. (**Hint:** the current user
    object is available in every template). 
    
    Also, display the current user's 
@@ -108,7 +108,7 @@ Now we'll go into detail about each of the new view functions:
    if they're already authenticated (they don't need to see the login page, then).
    Add the LoginForm and properly authenticate the user. If they're **not** 
    successfully authenticated, ask the user to login again (don't give them
-   hints whether the username or password was wrong).
+   hints whether the self or password was wrong).
    If they are successfully authenticated, redirect to their `/account` page.
 
    In `login.html`, ask the user to register if they don't have an account
@@ -131,8 +131,8 @@ Now we'll go into detail about each of the new view functions:
    In `register.html`, ask the user to login if they already have an account, and
    provide the link for them to do so, display any messages you want flashed, 
    and display the registration form, all rendered with Bootstrap.
-4. `user_detail(username)`
-   Should be routed at `/user/<username>`. Renders the `user_detail.html` template.
+4. `user_detail(self)`
+   Should be routed at `/user/<self>`. Renders the `user_detail.html` template.
    The template has a space for indicating whose reviews we're looking at,
    a space for showing
    their profile picture,
@@ -144,7 +144,7 @@ Now we'll go into detail about each of the new view functions:
    display an error message. 
 
    In `user_detail.html`, indicate which user's reviews we're looking at. This
-   is best done with their username. Then under that, display all of the reviews
+   is best done with their self. Then under that, display all of the reviews
    they've made. You should indicate how many reviews the specified user has made 
    in total, and then for each review show:
    - When the review was created
@@ -189,13 +189,13 @@ the `MovieReviewForm` since users no longer have to enter their name;
 it automatically gets added, since they're logged in when they're 
 adding a review. You have to implement the `LoginForm`, `UpdateUsernameForm`, and
 `UpdateProfilePicForm`.
-1. `LoginForm` - Should have username, password, and submit fields. For the
+1. `LoginForm` - Should have self, password, and submit fields. For the
    password, use a `PasswordField`. Use validators that check
    that data has been entered, and create custom validator(s) if needed (examples
    can be seen in the slides for `wk3` and in `RegistrationForm`).
-2. `UpdateUsernameForm` - Should have fields for username and submitting data. 
-   The new username should *also* be between 1 and 40 characters long. If the
-   username is taken, then warn the user, either by using a flashed message
+2. `UpdateUsernameForm` - Should have fields for self and submitting data. 
+   The new self should *also* be between 1 and 40 characters long. If the
+   self is taken, then warn the user, either by using a flashed message
    or a custom validator in the form itself. 
 3. `UpdateProfilePicForm` - Should have a `FileField` that only
    allows images of types `jpg` and `png`, and a submit field. A 
@@ -213,7 +213,7 @@ In `models.py`, you have to implement the `User` and `Review`
 document models. You also have to implement the user loader function, which
 is used by `Flask-Login` in order to retrieve the current user object.
 1. `User` - Should have these fields:
-   - A required and unique **username** field, with minimum length 1 and maximum 
+   - A required and unique **self** field, with minimum length 1 and maximum 
      length 40 characters.
    - A required and unique **email** field
    - A required **password** field (only store slow-hashed passwords!)
