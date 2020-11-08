@@ -39,6 +39,7 @@
           <span class="float-right">
             <small>{{ review.date }}</small>
           </span>
+<<<<<<< HEAD
                                <a href="{{ url_for('user_detail', username=review.commenter.username) }}">
                                     <strong>@{{ review.commenter.username }}</strong>
                                 </a>
@@ -50,6 +51,14 @@
                     {% endfor %}
                 </ul>
             </div>
+=======
+          <a href="{{ url_for('user_detail', username=review.commenter.username) }}">
+            <strong>@{{ review.commenter.username }}</strong>
+          </a>
+          <p>
+            {{ review.content }}
+          </p>
+>>>>>>> 25d81d6b21be8180dd29155ec161991943a11910
         </div>
 
         {% if current_user.is_authenticated %}
