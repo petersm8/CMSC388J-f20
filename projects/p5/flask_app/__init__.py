@@ -18,13 +18,13 @@ import os
 # local
 from .client import MovieClient
 
-
 db = MongoEngine()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 movie_client = MovieClient(os.environ.get("OMDB_API_KEY"))
 
-from .routes import main
+from flask_app.movies.routes import movies  # Blueprint class
+from flask_app.users.routes import users
 
 
 def page_not_found(e):
@@ -42,9 +42,10 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    app.register_blueprint(main)
+    app.register_blueprint(movies)
+    app.register_blueprint(users)
     app.register_error_handler(404, page_not_found)
 
-    login_manager.login_view = "main.login"
+    login_manager.login_view = "users.login"
 
     return app
